@@ -1,0 +1,88 @@
+
+<section class="searchSection mat-elevation-z8">
+
+  <div fxLayout="row" fxLayoutAlign="space-around center">
+
+    <button class='button' mat-raised-button (click)="getAllRecords()">
+      Get all members</button>
+
+    <button mat-raised-button (click)="getAllSelected()">Show Selected</button>
+    
+      <button mat-raised-button (click)="addRecord()">Add</button>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="space-around center">
+
+        <mat-form-field> 
+            <mat-select placeholder="Search by country" [formControl]="countriesControl">
+                <mat-option *ngFor="let country of countries"
+                            [value]="country"
+                            (click)="searchCountries(country)">{{country}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+
+        <!-- Last name query. -->
+              <mat-form-field id="searchField">
+                <input matInput (keyup)="searchTerm$.next($event.target.value)" placeholder="Search by last name">
+                  <mat-hint align="center">Enter at least first 3 letters.</mat-hint>
+              </mat-form-field>
+  </div>
+
+</section> <!-- End search section -->
+
+
+<section class='tableSection'>
+  
+    <mat-table class="matTable" [dataSource]="dataSource">
+
+    <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef> Select </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="selectMember(row.id)"></mat-checkbox>
+        </mat-cell>
+    </ng-container>
+ 
+    <ng-container matColumnDef="firstName">
+      <mat-header-cell *matHeaderCellDef> First Name </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.first_name}} </mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="lastName">
+      <mat-header-cell *matHeaderCellDef> Last Name </mat-header-cell>
+      <mat-cell  *matCellDef="let row">  {{row.last_name}} </mat-cell>
+    </ng-container>
+
+
+      <ng-container matColumnDef="userName">
+          <mat-header-cell *matHeaderCellDef> User Name </mat-header-cell>
+          <mat-cell *matCellDef="let row">  {{row.user_name}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="country">
+          <mat-header-cell *matHeaderCellDef> Country </mat-header-cell>
+          <mat-cell *matCellDef="let row">  {{row.country}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="options">
+          <mat-header-cell *matHeaderCellDef> Options </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <button (click)="deleteRecord(row.id)">Delete</button>
+            <button (click)="editRecord(row.id)">Edit</button>
+          </mat-cell>
+        </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+    </mat-table>
+
+    <mat-paginator #paginator
+                  [pageIndex]="0"
+                  [pageSize]="5"
+                  [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+</section>
+
